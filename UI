@@ -1,0 +1,92 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+
+public class UI : MonoBehaviour
+{
+
+    public List<Gundam> type = new List<Gundam>();
+
+    public GameObject buttonPrefab;
+    public Transform buttonContainer;
+
+    [Header("Info")]
+    public TextMeshProUGUI Name;
+    public TextMeshProUGUI Pilot;
+    public TextMeshProUGUI Timeline;
+
+    void Start()
+    {
+
+        Gundam gundam1 = new Gundam("Justice Gundam", "Athrun Zala", timeline.CosmicEra, 0);
+        Gundam gundam2 = new Gundam("Deathscythe Hell", "Duo Maxwell", timeline.UniversalCentury,1);
+        Gundam gundam3 = new Gundam("Astray Red Frame", "Lowe Guele", timeline.UniversalCentury,2);
+        Gundam gundam4 = new Gundam("Wing Gundam Zero", "Heero Yuy", timeline.AfterColony,3);
+        Gundam gundam5 = new Gundam("Gundam Epyon", "Zechs Merquise", timeline.AfterColony,4);
+        Gundam gundam6 = new Gundam("God Gundam", "Domon Kasshu", timeline.FutureCentury,5);
+        Gundam gundam7 = new Gundam("Gundam Barbatos", "Mikazuki Augus", timeline.PostDisaster,6);
+        Gundam gundam8 = new Gundam("Freedom Gundam", "Kira Yamato", timeline.CosmicEra,7);
+
+        type.Add(gundam1);
+        type.Add(gundam2);
+        type.Add(gundam3);
+        type.Add(gundam4);
+        type.Add(gundam5);
+        type.Add(gundam6);
+        type.Add(gundam7);
+        type.Add(gundam8);
+
+        foreach (Gundam h in type)
+        {
+            CreateGundamButton(h);
+        }
+    }
+
+    public void CreateGundamButton(Gundam gundam)
+    {
+        GameObject newGundam = Instantiate(buttonPrefab, buttonContainer);
+        Gundambutton GundamButton = newGundam.GetComponent<Gundambutton>();
+
+        Button button = GundamButton.GetComponent<Button>();
+
+        GundamButton.SetData(gundam);
+        button.onClick.AddListener(() => OnGundamButtonClick(gundam));
+    }
+
+    public void OnGundamButtonClick(Gundam gundam)
+    {
+        Name.text = gundam.Name;
+        Pilot.text = gundam.Pilot;
+        Timeline.text = gundam.Timeline.ToString();
+
+    }
+}
+  
+
+[System.Serializable]
+public class Gundam
+{
+    public string Name;
+    public string Pilot;
+    public timeline Timeline;
+    public int imageValue;
+    public Gundam(timeline timeline) //Default
+    {
+        Name = "Unidentified";
+        Pilot = "Unknown";
+        Timeline = timeline;
+        imageValue = 0;
+    }
+
+    public Gundam(string name, string pilot, timeline timeline, int imageValue)
+    {
+        this.Name = name;
+        this.Pilot = pilot;
+        this.Timeline = timeline;
+        this.imageValue = imageValue;
+    }
+}
+
+public enum timeline { UniversalCentury, FutureCentury, AfterColony, CosmicEra, PostDisaster, AdStella };
